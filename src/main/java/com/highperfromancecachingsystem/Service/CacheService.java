@@ -15,28 +15,24 @@ public class CacheService {
         String cachedResult = redisService.getFromCache(query);
 
         if (cachedResult != null) {
-            return cachedResult;  // If cached, return immediately
+            return cachedResult;
         } else {
-            // Step 2: Send query to RabbitMQ Producer
-            queryProducer.sendQuery(query);
 
-            // Step 3: Poll Redis for result
+            queryProducer.sendQuery(query);
             int maxAttempts = 5;
             int attempt = 0;
             while (attempt < maxAttempts) {
                 cachedResult = redisService.getFromCache(query);
                 if (cachedResult != null) {
-                    return cachedResult;  // Return when result is found
+                    return cachedResult;
                 }
                 try {
-                    Thread.sleep(1000);  // Wait for 1 second before checking again
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
                 attempt++;
             }
-
-            // Step 4: If result not ready, inform the user
             return "Your request is being processed. Please try again later.";
         }
 

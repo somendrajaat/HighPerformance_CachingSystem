@@ -16,9 +16,6 @@ public class QueryConsumer {
     public void receiveQuery(String query) {
         // Simulate AI generating a result
         String result = "Processed result for: " + query;
-
-        // here we will integrate the AI later
-        // Save result to Redis
         redisService.saveToCache(query, result);
     }
 }
