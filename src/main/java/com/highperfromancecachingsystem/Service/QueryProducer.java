@@ -1,5 +1,6 @@
 package com.highperfromancecachingsystem.Service;
 
+import com.highperfromancecachingsystem.Model.GeminiRequest;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ public class QueryProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendQuery(String query) {
-        rabbitTemplate.convertAndSend("queryQueue", query);
+    public String sendQuery(String query) {
+        return (String)rabbitTemplate.convertSendAndReceive("queryQueue", query);
     }
 }
